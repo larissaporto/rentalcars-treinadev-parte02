@@ -1,0 +1,8 @@
+<h1>Categoria: <%= @category.name %></h1>
+
+<p>Diária: <%= number_to_currency(@category.daily_rate) %> </p>
+<p>Seguro do veículo: <%= number_to_currency(@category.car_insurance) %> </p>
+<p>Seguro de Terceiros: <%= number_to_currency(@category.third_party_insurance) %> </p><br>
+<%= link_to 'Editar Categoria', edit_category_path(@category) %>
+<%= link_to 'Voltar', :back %>
+
