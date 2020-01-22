@@ -28,4 +28,9 @@ Rails.application.routes.draw do
   end
   resources :addons, only: %i[index new create edit update]
   resources :addon_prices, only: %i[index new create]
+  namespace :api do
+    namespace :v1 do
+      resources :cars, only: %i[show index]
+    end
+  end
 end

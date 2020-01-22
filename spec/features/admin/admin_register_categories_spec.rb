@@ -37,7 +37,7 @@ feature 'Admin register categories' do
     
 
     expect(page).to have_content('Erro, todos os dados devem ser preenchidos')
-    expect(current_path).to eq new_category_path
+    expect(page).to have_field('Diária padrão')
   end
 
   scenario 'admin edit category' do
