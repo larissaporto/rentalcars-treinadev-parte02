@@ -60,4 +60,61 @@ describe 'Car Management' do
       expect(json).to be_empty
     end
   end
+
+  context 'post' do
+    it 'should create car' do
+      car_model = create(:car_model)
+      subsidiary = create(:subsidiary)
+
+      post api_v1_cars_path, params: {car_model_id: car_model.id, subsidiary_id: subsidiary.id,
+                                     car_km: 200, license_plate: "ABC-1234", color: "Branco"}
+       
+      json = JSON.parse(response.body, symbolize_names: true)
+                               
+      expect(response).to have_http_status(201)
+      
+      car_last = Car.last
+      expect(car_last.license_plate).to eq("ABC-1234")
+      
+      expect(json[:car_model_id]).to eq(car_model.id)
+      expect(json[:car_km]).to eq(200)
+
+    end
+    it 'should not be blank' do
+      post api_v1_cars_path
+
+      expect(response).to have_http_status(412)
+    end
+
+    it 'should change car count' do
+      car_model = create(:car_model)
+      subsidiary = create(:subsidiary)
+
+      expect{
+        post api_v1_cars_path, params: {car_model_id: car_model.id, subsidiary_id: subsidiary.id,
+                                     car_km: 200, license_plate: "ABC-1234", color: "Branco"}
+             }.to change(Car, :count).by(1)                   
+    end
+  end
+  context 'patch' do
+    it 'should update car' do
+      car = create(:car, license_plate:'ABC-0987')
+
+      patch api_v1_car_path(car), params: {license_plate: 'DEF-1234'}
+      car.reload
+
+      expect(response).to have_http_status(200)
+      expect(car.license_plate).to eq("DEF-1234")
+
+    end
+
+    it 'should not create another car' do
+      car = create(:car, license_plate:'ABC-0987')
+
+      expect{
+        patch api_v1_car_path(car), params: {license_plate: 'DEF-1234'}
+             }.to change(Car, :count).by(0)    
+
+    end
+  end
 end

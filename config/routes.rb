@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   resources :addon_prices, only: %i[index new create]
   namespace :api do
     namespace :v1 do
-      resources :cars, only: %i[show index]
+      resources :cars, only: %i[show index create update]
     end
   end
 end
