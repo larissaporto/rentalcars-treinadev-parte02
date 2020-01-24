@@ -113,8 +113,22 @@ describe 'Car Management' do
 
       expect{
         patch api_v1_car_path(car), params: {license_plate: 'DEF-1234'}
-             }.to change(Car, :count).by(0)    
+             }.not_to change(Car, :count)   
 
+    end
+  end
+  context 'delete' do
+    it 'should delete car' do
+      car = create(:car)
+
+      delete api_v1_car_path(car)
+      json = JSON.parse(response.body, symbolize_names: true)
+
+
+      expect(response).to have_http_status(200)
+      expect(json[:body]).to eq('Carro deletado com sucesso')
+      expect(Car.count).to eq(0)
+      expect(Car.all).not_to include(car)
     end
   end
 end
