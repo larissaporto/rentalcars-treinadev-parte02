@@ -29,6 +29,6 @@ class Api::V1::CarsController < Api::V1::ApiController
   def destroy
     @car = Car.find(params[:id])
     @car.destroy
-    render json: {body: "Carro deletado com sucesso", status: 200}
+    render json: {body: "Carro deletado com sucesso"}, status: 200
   end
 end
