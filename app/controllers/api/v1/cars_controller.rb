@@ -1,7 +1,8 @@
 class Api::V1::CarsController < Api::V1::ApiController
   def show
     @car = Car.find(params[:id])
-    render json: @car
+    
+    render json: @car.as_json(method: :url_for(@car.image))
   end
 
   def index
@@ -10,11 +11,9 @@ class Api::V1::CarsController < Api::V1::ApiController
   end
 
   def create
-    @car = Car.create(params.permit(%i[car_model_id car_km color license_plate subsidiary_id]))
+    @car = Car.create(params.permit(%i[car_model_id car_km color license_plate subsidiary_id image]))
     if @car.valid?
-      if @car.persisted?
-        render json: @car, status: 201
-      end
+      return render json: @car, status: 201 if @car.persisted?
     else
       head 412
     end

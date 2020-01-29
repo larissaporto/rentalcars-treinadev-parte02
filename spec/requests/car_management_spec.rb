@@ -131,4 +131,16 @@ describe 'Car Management' do
       expect(Car.all).not_to include(car)
     end
   end
+  context 'receives a photo' do
+    it 'should receives a path for photo' do
+      car = create(:car)
+      car.image.attach(io: File.open('spec/support/uno.jpg'), filename: 'uno.jpg')
+
+      get api_v1_car_path(car)
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response). to have_http_status(200)
+      expect(response.body).to include('uno.jpg')
+    end
+  end
 end
